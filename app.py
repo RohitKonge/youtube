@@ -24,6 +24,7 @@ def get_download_link():
         'skip_download': True,
         'forceurl': True,
         'forcejson': True,
+        'cookiefile': 'cookies.txt' 
     }
 
     try:
