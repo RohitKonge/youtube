@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>YouTube Downloader</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <h1>YouTube MP4 Downloader</h1>
+  <input type="text" id="youtubeUrl" placeholder="Enter YouTube URL" />
+  <button onclick="getDownloadLink()">Get MP4 Link</button>
+  <p id="output"></p>
+
+  <script>
+    async function getDownloadLink() {
+      const url = document.getElementById("youtubeUrl").value.trim();
+      const output = document.getElementById("output");
+      output.innerText = "Fetching link...";
+
+      try {
+        const response = await fetch("/get_download_link", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ url })
+        });
+
+        const data = await response.json();
+
+        if (data.url) {
+          output.innerHTML = `<a href="${data.url}" target="_blank">Download: ${data.title}</a>`;
+        } else {
+          output.innerText = "Error: " + data.error;
+        }
+      } catch (error) {
+        output.innerText = "Failed to fetch: " + error.message;
+      }
+    }
+  </script>
+</body>
+</html>
